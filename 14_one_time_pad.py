@@ -27,3 +27,12 @@ def one_time_pad():
 
 if __name__ == "__main__":
     one_time_pad()
+#output
+$ python one_time_pad.py
+=== One-Time Pad ===
+Plaintext: sendmoremoney
+Key stream: [9, 0, 1, 7, 23, 15, 21, 14, 11, 11, 2, 8, 9]
+Ciphertext: blneoftfzdqhn
+
+To decrypt to 'cashnotneeded':
+New key stream: [25, 11, 13, 7, 1, 20, 13, 11, 24, 24, 1, 5, 6]
