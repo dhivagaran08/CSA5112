@@ -27,3 +27,17 @@ def hill_attack():
 
 if __name__ == "__main__":
     hill_attack()
+#output
+$ python hill_attack.py
+=== Hill Cipher Known Plaintext Attack ===
+Given plaintext-ciphertext pairs, find key matrix K
+
+C = K × P (mod 26)
+K = C × P^(-1) (mod 26)
+
+Enter plaintext pairs (e.g., 'HELP'): HELP
+Enter ciphertext pairs: ZEBB
+
+Recovered key matrix:
+[[9 4]
+ [5 7]]
