@@ -21,3 +21,11 @@ def playfair_keyspace():
 
 if __name__ == "__main__":
     playfair_keyspace()
+#output
+$ python playfair_keyspace.py
+=== Playfair Cipher Key Space ===
+Total possible keys: 25! = 15511210043330985984000000
+Approximately: 2^84
+
+Effectively unique keys: 6.20e+23
+Approximately: 2^81
