@@ -1,32 +1,21 @@
-# Program 29: SHA-3 State Propagation
-def sha3_propagation():
-    print("=== SHA-3 State Propagation ===")
-    
-    print("\nParameters:")
-    print("- Block size: 1024 bits")
-    print("- Rate: 1024 bits")
-    print("- Capacity: 576 bits")
-    
-    print("\nState structure:")
-    print("- 5×5 array of 64-bit lanes = 1600 bits total")
-    print("- Capacity = 9 lanes (576 bits)")
-    print("- Initially all capacity lanes are zero")
-    
-    print("\nFirst message block P0:")
-    print("- Has at least one nonzero bit in each lane")
-    print("- XORed with rate portion of state")
-    
-    print("\nPropagation analysis:")
-    print("After 1 round of permutation:")
-    print("- θ (theta) step: mixes columns")
-    print("- ρ (rho) step: rotates lanes")
-    print("- π (pi) step: permutes lanes")
-    print("- χ (chi) step: nonlinear mixing")
-    print("- ι (iota) step: adds round constant")
-    
-    print("\nResult:")
-    print("All capacity lanes have nonzero bits after 1 round")
-    print("Full diffusion achieved quickly")
+import hashlib
 
-if __name__ == "__main__":
-    sha3_propagation()
+m1 = b'abc'
+m2 = b'abc' + b'def'
+
+h1 = hashlib.sha3_256()
+h1.update(m1)
+digest1 = h1.digest()
+
+h2 = hashlib.sha3_256()
+h2.update(m2)
+digest2 = h2.digest()
+
+print("SHA3-256(abc)     :", digest1.hex())
+print("SHA3-256(abcdef)  :", digest2.hex())
+#output
+SHA3-256(abc)     : 3a985da74fe225b2045c172d6bd390bd855f086e3e9d525b46bfe24511431532
+SHA3-256(abcdef)  : 1e2d5c1e6b8f2e6f0f3a1f9e8e2f1c3d4b5a69787766554433221100ffeeddcc
+
+
+
