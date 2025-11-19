@@ -1,14 +1,55 @@
-# Program 18: DES Subkey Structure
-def des_subkey_structure():
-    print("=== DES Subkey Structure ===")
-    print("\nInitial 56-bit key split into:")
-    print("- C0: Left 28 bits")
-    print("- D0: Right 28 bits")
-    print("\nEach subkey (48 bits):")
-    print("- First 24 bits: Selected from C register (28 bits)")
-    print("- Second 24 bits: Selected from D register (28 bits)")
-    print("\nPC-2 permutation selects 48 bits from 56-bit concatenation")
-    print("The two halves come from disjoint subsets")
+PC1 = [
+    57,49,41,33,25,17,9,1,58,50,42,34,26,18,
+    10,2,59,51,43,35,27,19,11,3,60,52,44,36,
+    63,55,47,39,31,23,15,7,62,54,46,38,30,22,
+    14,6,61,53,45,37,29,21,13,5,28,20,12,4
+]
 
-if __name__ == "__main__":
-    des_subkey_structure()
+PC2 = [
+    14,17,11,24,1,5,3,28,15,6,21,10,
+    23,19,12,4,26,8,16,7,27,20,13,2,
+    41,52,31,37,47,55,30,40,51,45,33,48,
+    44,49,39,56,34,53,46,42,50,36,29,32
+]
+
+SHIFT_SCHEDULE = [1,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1]
+
+def permute(bits, table):
+    return ''.join(bits[i-1] for i in table)
+
+def left_shift(bits, n):
+    return bits[n:] + bits[:n]
+
+def generate_subkeys(key64):
+    key56 = permute(key64, PC1)
+    C, D = key56[:28], key56[28:]
+    subkeys = []
+    for shift in SHIFT_SCHEDULE:
+        C = left_shift(C, shift)
+        D = left_shift(D, shift)
+        subkeys.append(permute(C + D, PC2))
+    return subkeys
+
+key64 = '0001001100110100010101110111100110011011101111001101111111110001'
+subkeys = generate_subkeys(key64)
+
+for i, k in enumerate(subkeys, 1):
+    print(f"Round {i:2}: {k}")
+#output
+Round  1: 000110110000001011101111111111000111000001110010
+Round  2: 011110011010111011011001110110111100100111100101
+Round  3: 010101011111110010001010010000101100111110011001
+Round  4: 011100101010110111010110110110110011010100011101
+Round  5: 011111001110110000000111111010110101001110101000
+Round  6: 011000111010010100111110010100000111101100101111
+Round  7: 111011001000010010110111111101100001100010111100
+Round  8: 111101111000101000111010110000010011101111111011
+Round  9: 111000001101101111101011111011011110011110000001
+Round 10: 101100011111001101000111101110100100011001001111
+Round 11: 001000010101111111010011110111101101001110000110
+Round 12: 011101010111000111110101100101000110011111101001
+Round 13: 100101111100010111010001111110101011101001000001
+Round 14: 010111110100001110110111111100101110011100111010
+Round 15: 101111111001000110001101001111010011111100001010
+Round 16: 110010110011110110001011000011100001011111110101
+
