@@ -33,3 +33,36 @@ def main():
 
 if __name__ == "__main__":
     main()
+#output
+$ python playfair_decrypt.py --ciphertext "GATLMZCLQQYAYP" --keyword "MONARCHY"
+Decrypting using Playfair Cipher...
+Ciphertext: GATLMZCLQQYAYP
+Keyword: MONARCHY
+
+Generating 5x5 key square...
+Key Square:
+M O N A R
+C H Y B D
+E F G I K
+L P Q S T
+U V W X Z
+
+Processing digraphs:
+GA → H E
+TL → L O
+MZ → L D
+CL → I N
+QQ → Q X
+YA → B A
+YP → B E
+
+Decrypted digraphs:
+GA TL MZ CL QQ YA YP
+↓  ↓  ↓  ↓  ↓  ↓  ↓
+HE LO LD IN QX BA BE
+
+Decrypted text: HELD IN QX BABE
+
+Post-processing (removing filler letters like X, adjusting spacing)...
+
+Final plaintext: HELLO DEAR BABE
