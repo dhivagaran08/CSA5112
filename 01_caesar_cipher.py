@@ -26,3 +26,10 @@ def main():
 
 if __name__ == "__main__":
     main()
+#output
+=== Caesar Cipher ===
+Enter 'e' for encrypt or 'd' for decrypt: e
+Enter text: dhiva
+Enter shift value (1-25): 20
+
+
