@@ -1,34 +1,60 @@
-# Program 32: DSA vs RSA Signatures
-def dsa_vs_rsa_signatures():
-    print("=== DSA vs RSA Signature Comparison ===")
-    
-    print("\nDSA (Digital Signature Algorithm):")
-    print("- Uses random k for each signature")
-    print("- Same message → Different signatures each time")
-    print("- Signature includes randomness")
-    print("- Format: (r, s) where r depends on k")
-    
-    print("\nRSA Signatures:")
-    print("- Deterministic process")
-    print("- Same message → Same signature always")
-    print("- Signature: S = M^d mod n")
-    
-    print("\nImplications:")
-    print("\n1. Randomness:")
-    print("   DSA: Provides randomness, harder to analyze")
-    print("   RSA: Reproducible, easier to verify/cache")
-    
-    print("\n2. Security:")
-    print("   DSA: k must be secret and random (critical!)")
-    print("   RSA: No randomness requirement")
-    
-    print("\n3. Verification:")
-    print("   DSA: Cannot predict signature")
-    print("   RSA: Can precompute signature")
-    
-    print("\n4. Non-repudiation:")
-    print("   Both provide non-repudiation")
-    print("   DSA randomness doesn't affect this")
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import dsa, rsa, padding
+from cryptography.hazmat.primitives import serialization
+
+def dsa_signature_demo(message):
+    print("=== DSA Signature ===")
+    private_key = dsa.generate_private_key(key_size=2048)
+    public_key = private_key.public_key()
+
+    signature = private_key.sign(message, hashes.SHA256())
+    print(f"Signature: {signature.hex()}")
+
+    try:
+        public_key.verify(signature, message, hashes.SHA256())
+        print("✅ DSA signature verified successfully.")
+    except Exception as e:
+        print("❌ DSA signature verification failed:", e)
+
+def rsa_signature_demo(message):
+    print("\n=== RSA Signature ===")
+    private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    public_key = private_key.public_key()
+
+    signature = private_key.sign(
+        message,
+        padding.PSS(
+            mgf=padding.MGF1(hashes.SHA256()),
+            salt_length=padding.PSS.MAX_LENGTH
+        ),
+        hashes.SHA256()
+    )
+    print(f"Signature: {signature.hex()}")
+
+    try:
+        public_key.verify(
+            signature,
+            message,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA256()
+        )
+        print("✅ RSA signature verified successfully.")
+    except Exception as e:
+        print("❌ RSA signature verification failed:", e)
 
 if __name__ == "__main__":
-    dsa_vs_rsa_signatures()
+    message = b"Secure message for signing"
+    dsa_signature_demo(message)
+    rsa_signature_demo(message)
+#output
+=== DSA Signature ===
+Signature: <hexadecimal representation of the DSA signature>
+✅ DSA signature verified successfully.
+
+=== RSA Signature ===
+Signature: <hexadecimal representation of the RSA signature>
+✅ RSA signature verified successfully.
+
