@@ -42,3 +42,39 @@ def main():
 
 if __name__ == "__main__":
     main()
+#output
+Enter Plaintext : HELLOWORLD
+Enter Key       : KEY
+
+--- Repeated Key ---
+KEYKEYKEYK
+
+--- Encryption Process ---
+H + K = R
+E + E = I
+L + Y = J
+L + K = V
+O + E = S
+W + Y = U
+O + K = Y
+R + E = V
+L + Y = J
+D + K = N
+
+--- Ciphertext ---
+RIJVSUYVJN
+
+--- Decryption Process ---
+R - K = H
+I - E = E
+J - Y = L
+V - K = L
+S - E = O
+U - Y = W
+Y - K = O
+V - E = R
+J - Y = L
+N - K = D
+
+--- Decrypted Text ---
+HELLOWORLD
