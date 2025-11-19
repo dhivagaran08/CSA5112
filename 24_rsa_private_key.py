@@ -1,32 +1,25 @@
-# Program 24: RSA Private Key Calculation
-def rsa_private_key():
-    print("=== RSA Private Key Calculation ===")
-    e = 31
-    n = 3599
-    
-    print(f"Public key: e = {e}, n = {n}")
-    
-    # Factor n using trial division
-    print("\nFactoring n...")
-    for p in range(2, int(n**0.5) + 1):
-        if n % p == 0:
-            q = n // p
-            print(f"Found: p = {p}, q = {q}")
-            
-            # Calculate phi(n)
-            phi_n = (p - 1) * (q - 1)
-            print(f"φ(n) = (p-1)(q-1) = {phi_n}")
-            
-            # Calculate d using extended Euclidean algorithm
-            d = pow(e, -1, phi_n)
-            print(f"\nPrivate key: d = {d}")
-            
-            # Verify
-            print(f"\nVerification: (e × d) mod φ(n) = {(e * d) % phi_n}")
-            return d
-    
-    print("Could not factor n")
-    return None
+def egcd(a, b):
+    if a == 0:
+        return b, 0, 1
+    g, y, x = egcd(b % a, a)
+    return g, x - (b // a) * y, y
 
-if __name__ == "__main__":
-    rsa_private_key()
+def modinv(e, phi):
+    g, x, _ = egcd(e, phi)
+    if g != 1:
+        raise Exception('modular inverse does not exist')
+    return x % phi
+
+p = 61
+q = 53
+n = p * q
+phi = (p - 1) * (q - 1)
+e = 17
+d = modinv(e, phi)
+
+print("Public Key (n, e):", (n, e))
+print("Private Key (n, d):", (n, d))
+#output
+
+Public Key (n, e): (3233, 17)
+Private Key (n, d): (3233, 2753)
