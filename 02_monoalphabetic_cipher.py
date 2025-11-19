@@ -34,3 +34,11 @@ def main():
 
 if __name__ == "__main__":
     main()
+#output
+=== Monoalphabetic Cipher ===
+'e' for encrypt, 'd' for decrypt: e
+Enter text: csa5112
+Enter 26-letter key: 20
+
+
+
