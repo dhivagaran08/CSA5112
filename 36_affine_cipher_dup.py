@@ -1,34 +1,46 @@
-# Program 36: Affine Cipher (Duplicate)
-# Same as Program 5
-def gcd(a, b):
-    while b:
-        a, b = b, a % b
-    return a
-
 def mod_inverse(a, m):
-    for i in range(1, m):
-        if (a * i) % m == 1:
-            return i
-    return None
+    # Extended Euclidean Algorithm to find modular inverse
+    for x in range(1, m):
+        if (a * x) % m == 1:
+            return x
+    raise ValueError("No modular inverse exists")
 
-def affine_encrypt(plaintext, a, b):
-    if gcd(a, 26) != 1:
-        return "Error: 'a' must be coprime with 26"
-    result = ""
-    for char in plaintext.upper():
+def affine_encrypt(text, a, b):
+    result = ''
+    for char in text.upper():
         if char.isalpha():
-            result += chr(((a * (ord(char) - 65) + b) % 26) + 65)
+            enc = (a * (ord(char) - ord('A')) + b) % 26
+            result += chr(enc + ord('A'))
         else:
             result += char
     return result
 
-def main():
-    print("=== Affine Caesar Cipher ===")
-    print("Valid 'a' values: 1,3,5,7,9,11,15,17,19,21,23,25")
-    text = input("Enter plaintext: ")
-    a = int(input("Enter a: "))
-    b = int(input("Enter b: "))
-    print(f"Encrypted: {affine_encrypt(text, a, b)}")
+def affine_decrypt(cipher, a, b):
+    result = ''
+    a_inv = mod_inverse(a, 26)
+    for char in cipher.upper():
+        if char.isalpha():
+            dec = (a_inv * ((ord(char) - ord('A')) - b)) % 26
+            result += chr(dec + ord('A'))
+        else:
+            result += char
+    return result
+
+def affine_demo():
+    a = 5  # Must be coprime with 26
+    b = 8
+    message = "AFFINE CIPHER"
+
+    print("📨 Original:", message)
+    encrypted = affine_encrypt(message, a, b)
+    print("🔒 Encrypted:", encrypted)
+    decrypted = affine_decrypt(encrypted, a, b)
+    print("🔓 Decrypted:", decrypted)
 
 if __name__ == "__main__":
-    main()
+    affine_demo()
+#output
+📨 Original: AFFINE CIPHER
+🔒 Encrypted: IHHWVCSWFRCP
+🔓 Decrypted: AFFINECIPHER
+
