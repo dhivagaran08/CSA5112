@@ -22,3 +22,25 @@ def frequency_attack_additive():
 
 if __name__ == "__main__":
     frequency_attack_additive()
+#output
+$ python frequency_attack_additive.py
+=== Frequency Attack on Additive Cipher ===
+Enter ciphertext: ZEBBW
+How many top results? (default 10): 5
+
+Top 5 possible plaintexts:
+
+1. Shift 0:
+ZEBBW
+
+2. Shift 1:
+YDAAV
+
+3. Shift 2:
+XCZZU
+
+4. Shift 3:
+WBYYT
+
+5. Shift 4:
+VAXXS
