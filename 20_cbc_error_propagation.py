@@ -1,24 +1,30 @@
-# Program 20: CBC Error Propagation
-def cbc_error_propagation():
-    print("=== CBC Mode Error Propagation ===")
-    
-    print("\nPart a) Error in transmitted ciphertext C1:")
-    print("- P1 is completely corrupted (all bits affected)")
-    print("- P2 has same bit error as C1 (1 bit affected)")
-    print("- P3, P4, ... are NOT affected")
-    print("Conclusion: Error affects only 2 blocks")
-    
-    print("\nPart b) Bit error in source plaintext P1:")
-    print("At sender:")
-    print("- C1 is affected (1 bit error)")
-    print("- C2 is completely affected (avalanche effect)")
-    print("- C3, C4, ... are NOT affected")
-    
-    print("\nAt receiver:")
-    print("- P1 recovered correctly (1 bit error)")
-    print("- P2 completely corrupted")
-    print("- P3 onwards are correct")
-    print("\nError propagates through 2 ciphertext blocks")
+from Crypto.Cipher import DES3
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad, unpad
 
-if __name__ == "__main__":
-    cbc_error_propagation()
+key = DES3.adjust_key_parity(get_random_bytes(24))
+iv = get_random_bytes(8)
+cipher = DES3.new(key, DES3.MODE_CBC, iv)
+
+plaintext = b'This is a secret message that spans multiple blocks.'
+ciphertext = cipher.encrypt(pad(plaintext, DES3.block_size))
+
+corrupted = bytearray(ciphertext)
+corrupted[8] ^= 0xFF  # flip bits in second block
+
+decipher = DES3.new(key, DES3.MODE_CBC, iv)
+try:
+    decrypted = unpad(decipher.decrypt(bytes(corrupted)), DES3.block_size)
+except:
+    decrypted = b'[Decryption failed due to padding error]'
+
+print("Original Plaintext :", plaintext)
+print("Corrupted Ciphertext:", corrupted.hex())
+print("Decrypted Output    :", decrypted)
+#output
+Original Plaintext : b'This is a secret message that spans multiple blocks.'
+Corrupted Ciphertext: 3f2c1a...<hex with flipped byte>...
+Decrypted Output    : b'This is a \x9c\x8f\x1f...<garbled>...multiple blocks.'
+
+
+
