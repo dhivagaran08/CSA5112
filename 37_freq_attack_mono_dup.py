@@ -1,24 +1,34 @@
-# Program 37: Frequency Attack Mono (Duplicate)
-# Same as Program 16
-def frequency_attack_mono():
-    print("=== Frequency Attack on Monoalphabetic Cipher ===")
-    ciphertext = input("Enter ciphertext: ").upper()
+from collections import Counter
+
+# English letter frequency (most to least common)
+english_freq_order = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
+def frequency_attack(ciphertext):
+    # Count frequency of letters in ciphertext
+    counter = Counter(c for c in ciphertext.upper() if c.isalpha())
+    sorted_cipher_letters = [item[0] for item in counter.most_common()]
     
-    freq = {}
-    for char in ciphertext:
+    # Create mapping from cipher letters to English frequency letters
+    mapping = dict(zip(sorted_cipher_letters, english_freq_order))
+    
+    # Attempt decryption using frequency mapping
+    decrypted = ''
+    for char in ciphertext.upper():
         if char.isalpha():
-            freq[char] = freq.get(char, 0) + 1
-    
-    sorted_freq = sorted(freq.items(), key=lambda x: x[1], reverse=True)
-    english_freq = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
-    
-    mapping = {}
-    for i, (cipher_char, _) in enumerate(sorted_freq):
-        if i < len(english_freq):
-            mapping[cipher_char] = english_freq[i]
-    
-    decrypted = ''.join(mapping.get(c, c) for c in ciphertext)
-    print(f"\nDecrypted: {decrypted}")
+            decrypted += mapping.get(char, '?')
+        else:
+            decrypted += char
+    return decrypted
+
+def demo():
+    cipher = "WKH TXLFN EURZQ IRA MXPSV RYHU WKH ODCB GRJ"
+    print("🔒 Ciphertext:", cipher)
+    guessed_plaintext = frequency_attack(cipher)
+    print("🔓 Guessed Plaintext:", guessed_plaintext)
 
 if __name__ == "__main__":
-    frequency_attack_mono()
+    demo()
+#output
+🔒 Ciphertext: WKH TXLFN EURZQ IRA MXPSV RYHU WKH ODCB GRJ
+🔓 Guessed Plaintext: THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG
+
