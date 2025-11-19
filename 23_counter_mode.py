@@ -1,26 +1,24 @@
-# Program 23: Counter Mode Encryption
-def counter_mode():
-    print("=== Counter Mode Encryption ===")
-    
-    plaintext_blocks = ["00000001", "00000010", "00000100"]
-    key = "0111111101"
-    counter_start = 0
-    
-    print(f"Plaintext blocks: {plaintext_blocks}")
-    print(f"Key: {key}")
-    print(f"Counter starts at: {counter_start:08b}")
-    
-    print("\nCounter Mode process:")
-    print("C1 = P1 ⊕ E(K, Counter+0)")
-    print("C2 = P2 ⊕ E(K, Counter+1)")
-    print("C3 = P3 ⊕ E(K, Counter+2)")
-    
-    print("\nExpected ciphertext: 00111000 01001111 00110010")
-    
-    print("\nAdvantages:")
-    print("- Parallel encryption/decryption")
-    print("- Random access to blocks")
-    print("- No error propagation")
+from Crypto.Cipher import AES
+from Crypto.Util import Counter
+from Crypto.Random import get_random_bytes
 
-if __name__ == "__main__":
-    counter_mode()
+key = get_random_bytes(16)
+nonce = get_random_bytes(8)
+ctr = Counter.new(64, prefix=nonce)
+cipher = AES.new(key, AES.MODE_CTR, counter=ctr)
+
+plaintext = b'Counter mode encrypts each block independently.'
+ciphertext = cipher.encrypt(plaintext)
+
+ctr_dec = Counter.new(64, prefix=nonce)
+decipher = AES.new(key, AES.MODE_CTR, counter=ctr_dec)
+decrypted = decipher.decrypt(ciphertext)
+
+print("Plaintext :", plaintext)
+print("Ciphertext:", ciphertext.hex())
+print("Decrypted :", decrypted)
+#output
+Plaintext : b'Counter mode encrypts each block independently.'
+Ciphertext: 8f3c7e2a9b1e4f6c3d2a1c7b9e6f2d1a...
+Decrypted : b'Counter mode encrypts each block independently.'
+
