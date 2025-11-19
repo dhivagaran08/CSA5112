@@ -1,35 +1,32 @@
-# Program 34: Padding in Block Ciphers
-def padding_explanation():
-    print("=== Block Cipher Padding ===")
-    
-    print("\nRequirement:")
-    print("Plaintext must be multiple of block size")
-    print("- DES/3DES: 64-bit blocks (8 bytes)")
-    print("- AES: 128-bit blocks (16 bytes)")
-    
-    print("\nPadding method:")
-    print("Add '1' bit followed by '0' bits")
-    
-    print("\nExamples (8-byte blocks):")
-    print("\n1. Message: 7 bytes")
-    print("   Padding: 10000000 (1 byte)")
-    
-    print("\n2. Message: 5 bytes")
-    print("   Padding: 10000000 00000000 00000000 (3 bytes)")
-    
-    print("\n3. Message: 8 bytes (complete block)")
-    print("   Padding: 10000000 00000000 ... (8 bytes)")
-    print("   Add entire padding block!")
-    
-    print("\nWhy always pad?")
-    print("- Receiver knows to remove padding")
-    print("- No ambiguity about message end")
-    print("- Security: prevents certain attacks")
-    print("- Consistency: same process for all messages")
-    
-    print("\nRemoving padding:")
-    print("- Find last '1' bit")
-    print("- Remove it and all following '0' bits")
+from Crypto.Cipher import DES
+from Crypto.Util.Padding import pad, unpad
+from Crypto.Random import get_random_bytes
+
+def padding_demo():
+    key = get_random_bytes(8)  # DES requires 8-byte key
+    cipher = DES.new(key, DES.MODE_ECB)
+
+    message = b"Hello"  # Only 5 bytes, needs padding
+    print("📨 Original:", message)
+
+    # Padding the message to match DES block size
+    padded = pad(message, DES.block_size)
+    print("🧱 Padded:", padded)
+
+    # Encrypt
+    encrypted = cipher.encrypt(padded)
+    print("🔒 Encrypted:", encrypted.hex())
+
+    # Decrypt
+    decrypted_padded = cipher.decrypt(encrypted)
+    decrypted = unpad(decrypted_padded, DES.block_size)
+    print("🔓 Decrypted:", decrypted)
 
 if __name__ == "__main__":
-    padding_explanation()
+    padding_demo()
+#output
+
+📨 Original: b'Hello'
+🧱 Padded: b'Hello\x03\x03\x03'
+🔒 Encrypted: 8f3c1e9a8b7d6c4f...
+🔓 Decrypted: b'Hello'
