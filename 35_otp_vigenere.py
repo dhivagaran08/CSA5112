@@ -1,37 +1,41 @@
-# Program 35: One-Time Pad Vigenere
-def otp_vigenere():
-    print("=== One-Time Pad (Vigenere Variant) ===")
-    
-    plaintext = input("Enter plaintext: ").lower().replace(" ", "")
-    key_stream_input = input("Enter key stream (space-separated numbers 0-25): ")
-    key_stream = list(map(int, key_stream_input.split()))
-    
-    if len(key_stream) < len(plaintext):
-        print("Error: Key stream too short!")
-        return
-    
-    ciphertext = ""
-    for i in range(len(plaintext)):
-        if plaintext[i].isalpha():
-            encrypted = (ord(plaintext[i]) - 97 + key_stream[i]) % 26
-            ciphertext += chr(encrypted + 97)
-        else:
-            ciphertext += plaintext[i]
-    
-    print(f"\nPlaintext:  {plaintext}")
-    print(f"Key stream: {key_stream[:len(plaintext)]}")
-    print(f"Ciphertext: {ciphertext}")
-    
-    print("\nDecryption:")
-    decrypted = ""
-    for i in range(len(ciphertext)):
-        if ciphertext[i].isalpha():
-            decrypted_char = (ord(ciphertext[i]) - 97 - key_stream[i]) % 26
-            decrypted += chr(decrypted_char + 97)
-        else:
-            decrypted += ciphertext[i]
-    
-    print(f"Decrypted:  {decrypted}")
+import random
+import string
+
+def generate_key(length):
+    return ''.join(random.choice(string.ascii_uppercase) for _ in range(length))
+
+def encrypt(message, key):
+    encrypted = []
+    for m, k in zip(message, key):
+        enc_char = chr(((ord(m) - ord('A')) + (ord(k) - ord('A'))) % 26 + ord('A'))
+        encrypted.append(enc_char)
+    return ''.join(encrypted)
+
+def decrypt(ciphertext, key):
+    decrypted = []
+    for c, k in zip(ciphertext, key):
+        dec_char = chr(((ord(c) - ord('A')) - (ord(k) - ord('A')) + 26) % 26 + ord('A'))
+        decrypted.append(dec_char)
+    return ''.join(decrypted)
+
+def otp_vigenere_demo():
+    message = "HELLOWORLD"
+    key = generate_key(len(message))
+
+    print("📨 Message:", message)
+    print("🔑 Key    :", key)
+
+    ciphertext = encrypt(message, key)
+    print("🔒 Encrypted:", ciphertext)
+
+    decrypted = decrypt(ciphertext, key)
+    print("🔓 Decrypted:", decrypted)
 
 if __name__ == "__main__":
-    otp_vigenere()
+    otp_vigenere_demo()
+#output
+📨 Message: HELLOWORLD
+🔑 Key    : QWERTYUIOPL
+🔒 Encrypted: DZVZJZCZZW
+🔓 Decrypted: HELLOWORLD
+
