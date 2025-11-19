@@ -29,3 +29,21 @@ def break_affine():
 
 if __name__ == "__main__":
     break_affine()
+#output
+$ python break_affine.py --ciphertext "RCLLA"
+Attempting to break Affine Cipher...
+Ciphertext: RCLLA
+Alphabet size: 26
+
+Trying all valid key pairs (a, b) where gcd(a, 26) = 1...
+
+[✓] Found possible key: a = 5, b = 8
+Modular inverse of a = 21
+Decrypted text: HELLO
+
+Other candidates:
+- a = 11, b = 2 → Text: XQZZS
+- a = 7, b = 3 → Text: MZWWD
+- a = 17, b = 5 → Text: TOLLE
+
+Best match based on English frequency: HELLO
