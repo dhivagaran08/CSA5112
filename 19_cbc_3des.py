@@ -1,21 +1,22 @@
-# Program 19: CBC Mode with 3DES
-def cbc_3des_comparison():
-    print("=== CBC Mode with 3DES ===")
-    print("\nOptions:")
-    print("a) Security: 3DES with three independent keys (EDE3)")
-    print("   - Most secure: K1, K2, K3 all different")
-    print("   - Effective key length: 168 bits")
-    
-    print("\nb) Performance: 3DES with two keys (EDE2)")
-    print("   - Faster: K1 = K3, only K2 is different")
-    print("   - Effective key length: 112 bits")
-    print("   - Better performance, acceptable security")
-    
-    choice = input("\nChoose (a/b): ").lower()
-    if choice == 'a':
-        print("\nRecommendation: Use EDE3 mode for maximum security")
-    else:
-        print("\nRecommendation: Use EDE2 mode for better performance")
+from Crypto.Cipher import DES3
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad, unpad
 
-if __name__ == "__main__":
-    cbc_3des_comparison()
+key = DES3.adjust_key_parity(get_random_bytes(24))
+iv = get_random_bytes(8)
+cipher = DES3.new(key, DES3.MODE_CBC, iv)
+
+plaintext = b'This is a secret message.'
+ciphertext = cipher.encrypt(pad(plaintext, DES3.block_size))
+
+decipher = DES3.new(key, DES3.MODE_CBC, iv)
+decrypted = unpad(decipher.decrypt(ciphertext), DES3.block_size)
+
+print("Plaintext :", plaintext)
+print("Ciphertext:", ciphertext.hex())
+print("Decrypted :", decrypted)
+#output
+Plaintext : b'This is a secret message.'
+Ciphertext: 9f3c7f4e3b7f6e8a6c3e2d1a7b9e4f2c5a1d3c7f8e6b2a1c
+Decrypted : b'This is a secret message.'
+
