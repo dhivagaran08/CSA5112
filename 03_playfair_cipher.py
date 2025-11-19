@@ -46,3 +46,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+#output
+Key: PLAYFAIREXAMPLE
+Plaintext: HIDETHEGOLDINTHETREESTUMP
+Ciphertext: BMODZBXDNABEKUDMUIXMMOUVIF
+Decrypted (raw): HIDETHEGOLDINTHETREESTUMPX
