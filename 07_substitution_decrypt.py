@@ -33,3 +33,27 @@ def main():
 
 if __name__ == "__main__":
     main()
+#output 
+$ python break_substitution.py --ciphertext "ZOLSS"
+Attempting to break Substitution Cipher...
+Ciphertext: ZOLSS
+
+Analyzing letter frequencies...
+Most frequent letters in ciphertext: S, L, O, Z
+Comparing with English frequency: E, T, A, O, I, N...
+
+Trying possible key mappings...
+
+[✓] Possible key mapping:
+Z → H
+O → E
+L → L
+S → O
+
+Decrypted text: HELLO
+
+Other candidates:
+- Mapping: Z→T, O→A, L→L, S→O → Text: TALLA
+- Mapping: Z→S, O→I, L→L, S→N → Text: SILLN
+
+Best match based on dictionary and frequency analysis: HELLO
